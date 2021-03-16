@@ -31,7 +31,6 @@ public class RegisterActivity extends Activity {
     private Button btnRegister;
     private Context context = this;
     private RequestQueue requestQueue;
-    public static final String PREFIX = ":8001/user";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,7 +74,7 @@ public class RegisterActivity extends Activity {
             User user = new User(username,password,email);
             JSONObject jsonObject = JsonTools.toJsonObject(user);
 
-            String url = MoonkerApplication.URL+PREFIX+"/registry";
+            String url = MoonkerApplication.URL+MoonkerApplication.USER_PREFIX+"/registry";
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
                         @Override

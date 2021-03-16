@@ -53,7 +53,6 @@ public class RichTextEditActivity extends Activity implements View.OnClickListen
     private List<Uri>  uriList;
     private RequestQueue requestQueue;
 
-    private static final String PREFIX = ":9001/article";
     private Context context = this;
     /********************View**********************/
     //文本编辑器
@@ -158,7 +157,7 @@ public class RichTextEditActivity extends Activity implements View.OnClickListen
 
             JSONObject jsonObject = JsonTools.toJsonObject(article);
             Log.i(TAG, "setPublish: "+jsonObject.toString());
-            String url = MoonkerApplication.URL+PREFIX+"/publish";
+            String url = MoonkerApplication.URL+MoonkerApplication.ARTICLE_PREFIX+"/publish";
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
                         @Override

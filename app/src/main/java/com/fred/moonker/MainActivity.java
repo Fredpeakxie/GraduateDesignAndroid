@@ -65,7 +65,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+//TODO login status
     /**
      * 用户登录状态检测
      */

@@ -38,7 +38,6 @@ public class LoginActivity extends Activity {
     private EditText etUsername,etPassword;
     private final Context context = this;
     private RequestQueue requestQueue;
-    public static final String PREFIX = ":8001/user";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +57,7 @@ public class LoginActivity extends Activity {
 
     private void setListener() {
         btnLogin.setOnClickListener(v -> {
-            String url = MoonkerApplication.URL+PREFIX+"/login";
+            String url = MoonkerApplication.URL+MoonkerApplication.USER_PREFIX+"/login";
 
             String username = etUsername.getText().toString();
             String password = etPassword.getText().toString();
