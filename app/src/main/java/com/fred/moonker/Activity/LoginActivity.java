@@ -38,7 +38,7 @@ public class LoginActivity extends Activity {
     private EditText etUsername,etPassword;
     private final Context context = this;
     private RequestQueue requestQueue;
-    public static final String PREFIX = ":8001/user/";
+    public static final String PREFIX = ":8001/user";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,31 +60,30 @@ public class LoginActivity extends Activity {
         btnLogin.setOnClickListener(v -> {
             String url = MoonkerApplication.URL+PREFIX+"/login";
 
-            String usernameS = etUsername.getText().toString();
-            String passwordS = etPassword.getText().toString();
-            if(usernameS.isEmpty()){
+            String username = etUsername.getText().toString();
+            String password = etPassword.getText().toString();
+            if(username.isEmpty()){
                 Toast.makeText(this,"输入用户名为空",Toast.LENGTH_SHORT).show();
                 return;
-            }else if(passwordS.isEmpty()){
+            }else if(password.isEmpty()){
                 Toast.makeText(this,"输入密码为空",Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            User user = new User();
-            user.setUsername(usernameS);
-            user.setPassword(passwordS);
+            User user = new User(username,password);
             JSONObject jsonObject = JsonTools.toJsonObject(user);
 
             JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                     (Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
                         @Override
                         public void onResponse(JSONObject response) {
-//                            Toast.makeText(context,"Response: " + response.toString(), Toast.LENGTH_SHORT).show();
+                            Log.i(TAG, "onResponse: "+response.toString());
                             CommonResult<User> userCommonResult = JsonTools.toCommonResult(response, User.class);
                             //登录成功验证 使用commonResult的code做判断
                             if(userCommonResult.getCode().equals(RetCode.OK)){
+                                Log.i(TAG, "onResponse: "+userCommonResult.getData());
                                 //将用户全局保存
-                                MoonkerApplication.setUser(userCommonResult.getData());
+                                ((MoonkerApplication)getApplication()).setUser(userCommonResult.getData());
                                 Log.i(TAG, "onResponse: login:"+MoonkerApplication.getUser());
                                 Intent intent = new Intent(context, MainActivity.class);
                                 startActivity(intent);
@@ -100,6 +99,10 @@ public class LoginActivity extends Activity {
                         }
                     });
             requestQueue.add(jsonObjectRequest);
+        });
+        btnJumpRegister.setOnClickListener(v -> {
+            Intent intent = new Intent(context, RegisterActivity.class);
+            startActivity(intent);
         });
     }
 }

@@ -1,6 +1,7 @@
 package com.fred.moonker.tools;
 
 import com.fred.moonker.Model.CommonResult;
+import com.fred.moonker.Model.User;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
@@ -22,7 +23,8 @@ public class JsonTools {
 
     public static <T> CommonResult<T>  toCommonResult(JSONObject jsonObject, Class<T> classOfT){
         CommonResult toCommonResult = gson.fromJson(jsonObject.toString(), CommonResult.class);
-        return new CommonResult<T>().addData(gson.fromJson(toCommonResult.getData().toString(),classOfT))
+        T t = gson.fromJson(toCommonResult.getData().toString(), classOfT);
+        return new CommonResult<T>().addData(t)
                 .addCode(toCommonResult.getCode())
                 .addMessage(toCommonResult.getMessage());
     }

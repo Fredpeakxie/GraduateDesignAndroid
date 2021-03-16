@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/msg"
+        android:enabled="true"
+        android:icon="@mipmap/msg"
+        android:title="@string/recommend" />
+    <item
+        android:id="@+id/mark"
+        android:enabled="true"
+        android:icon="@mipmap/mark"
+        android:title="@string/mark"/>
+    <item
+        android:id="@+id/set"
+        android:enabled="true"
+        android:icon="@mipmap/set"
+        android:title="@string/set"/>
+</menu>

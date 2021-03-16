@@ -9,17 +9,28 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class User {
 
-    private Long UserID;
+    private Long userID;
     private String username;//20
     private String password;//20
     private String email;//20
     private String nickname;//20
     private String introduction;//100
 
+    public User(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public User(String username, String password, String email) {
+        this.username = username;
+        this.password = password;
+        this.email = email;
+    }
+
     @Override
     public String toString() {
         return "User{" +
-                "UserID=" + UserID +
+                "userID=" + userID +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +

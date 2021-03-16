@@ -1,3 +1,21 @@
 <resources>
     <string name="app_name">Moonker</string>
+    <string name="recommend">推荐</string>
+    <string name="mark">收藏</string>
+    <string name="set">设置</string>
+    <string name="waiting">正在加载请稍后...</string>
+    <string name="readNum">阅读:</string>
+    <string name="likeNum">点赞:</string>
+    <string name="markNum">收藏:</string>
+    <string name="article_num">文章数</string>
+    <string name="getlike_num">获赞数</string>
+    <string name="getmark_num">收藏数</string>
+    <string name="edit">编辑</string>
+    <string name="finish">完成</string>
+    <string name="publish_article">发布文章</string>
+    <string name="publish">发布</string>
+    <string name="enter_title">请输入文章标题</string>
+    <string name="exit">退出</string>
+    <string name="comment">发布</string>
+    <string name="myArticle">我的文章</string>
 </resources>
