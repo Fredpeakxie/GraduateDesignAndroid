@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,6 +27,7 @@ import com.fred.moonker.Model.RetCode;
 import com.fred.moonker.MoonkerApplication;
 import com.fred.moonker.R;
 import com.fred.moonker.adapter.ArticleDetailAdapter;
+import com.fred.moonker.listener.ArticleClick;
 import com.fred.moonker.tools.JsonTools;
 import com.fred.moonker.tools.NetTools;
 
@@ -54,7 +56,7 @@ public class MsgFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = initView(inflater);
         initData();
-//        setViewAfterInit();
+        initViewAfterInitData();
         return view;
     }
 
@@ -70,6 +72,29 @@ public class MsgFragment extends Fragment {
         addArticleDetailList(index,NUM);
     }
 
+    private void initViewAfterInitData(){
+        articleDetailAdapter = new ArticleDetailAdapter(getActivity(),R.layout.item_article_detail,articleDetailList);
+        listView.setAdapter(articleDetailAdapter);
+        listView.setOnItemClickListener(new ArticleClick(listView,getContext()));
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+                if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE){
+                    if(view.getLastVisiblePosition() == view.getCount()-1){
+                        index = index + NUM;
+                        addArticleDetailList(index,NUM);
+                    }
+                }
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+//                lastItem = firstVisibleItem + visibleItemCount - 1;
+            }
+        });
+    }
+
+    //触发加载文章详情
     private void addArticleDetailList(Long start,Long num){
         String url = MoonkerApplication.URL+MoonkerApplication.ARTICLE_PREFIX+"/ArticleDetail/"+start+"/"+num;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
@@ -80,6 +105,10 @@ public class MsgFragment extends Fragment {
                         CommonResult<List<ArticleDetail>> commonResult = JsonTools.toAdListCommonResult(response);
                         if(commonResult.getCode().equals(RetCode.OK)){
                             articleDetailList.addAll(commonResult.getData());
+                            articleDetailAdapter.notifyDataSetChanged();
+                            if(start==0){
+                                listView.smoothScrollToPosition(0);
+                            }
                         }
                     }
                 }, new Response.ErrorListener() {
