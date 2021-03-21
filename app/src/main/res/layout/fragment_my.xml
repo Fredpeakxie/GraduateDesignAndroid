@@ -9,8 +9,8 @@
         android:id="@+id/set_f_img_btn_user_head"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
-        android:layout_width="200dp"
-        android:layout_height="200dp" />
+        android:layout_width="160dp"
+        android:layout_height="160dp" />
 
     <EditText
         android:id="@+id/set_f_tv_user_nickname"
@@ -18,7 +18,7 @@
         android:text="nickname"
         android:textSize="40dp"
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="70dp"
         android:gravity="center_horizontal"/>
     <EditText
         android:id="@+id/set_f_tv_user_introduction"

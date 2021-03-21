@@ -22,10 +22,12 @@ public class MoonkerApplication extends Application {
 
     public static final String PROJECT_URI = "moonker";
     public static final String HTML_URI = "/article/";
+    public static final String PORTRAIT_URI = "/portrait/";
     public static final String ARTICLE_PIC = "/pic";
 
     public static final String HTML_PATH = URL+":9001/"+PROJECT_URI+HTML_URI;
     public static final String UAR_PATH = URL+User_Article_Relation_PREFIX;
+    public static final String PORTRAIT_PATH = URL+":8001/"+PROJECT_URI+PORTRAIT_URI;
 
     /**
      * 退出登录时调用

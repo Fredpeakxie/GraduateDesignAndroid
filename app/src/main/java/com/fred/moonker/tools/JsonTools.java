@@ -1,5 +1,6 @@
 package com.fred.moonker.tools;
 
+import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.fred.moonker.Model.ArticleDetail;
 import com.fred.moonker.Model.CommonResult;
@@ -27,8 +28,12 @@ public class JsonTools {
     }
 
     public static <T> CommonResult<T>  toCommonResult(JSONObject jsonObject, Class<T> classOfT){
-        CommonResult toCommonResult = gson.fromJson(jsonObject.toString(), CommonResult.class);
-        T t = gson.fromJson(toCommonResult.getData().toString(), classOfT);
+        CommonResult toCommonResult = JSON.parseObject(jsonObject.toString(), CommonResult.class);
+        System.out.println(toCommonResult.getData());
+        if(toCommonResult.getData()==null){
+            return toCommonResult;
+        }
+        T t = JSON.parseObject(toCommonResult.getData().toString(), classOfT);
         return new CommonResult<T>().addData(t)
                 .addCode(toCommonResult.getCode())
                 .addMessage(toCommonResult.getMessage());

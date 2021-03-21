@@ -47,7 +47,7 @@ public class PicTools {
         return imgToBase64;
     }
 
-    private static String imgToBase64(Bitmap bitmap) {
+    public static String imgToBase64(Bitmap bitmap) {
         if (bitmap != null){
             ByteArrayOutputStream out = null;
             try {
