@@ -44,4 +44,14 @@ public class JsonTools {
                 .addMessage(commonResult.getMessage());
     }
 
+    public static CommonResult<List<Long>> toLongListCommonResult(JSONObject jsonObject){
+        CommonResult commonResult = gson.fromJson(jsonObject.toString(), CommonResult.class);
+        System.out.println(commonResult.getData().toString());
+        String listAd = JSONArray.toJSONString(commonResult.getData());
+        List<Long> LongList = com.alibaba.fastjson.JSONObject.parseArray(listAd, Long.class);
+        return new CommonResult<List<Long>>().addData(LongList)
+                .addCode(commonResult.getCode())
+                .addMessage(commonResult.getMessage());
+    }
+
 }

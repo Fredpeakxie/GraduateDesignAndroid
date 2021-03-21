@@ -16,6 +16,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.fred.moonker.MainActivity;
 import com.fred.moonker.Model.CommonResult;
 import com.fred.moonker.Model.RetCode;
@@ -29,6 +30,8 @@ import com.google.gson.JsonObject;
 
 import org.json.JSONException;
 import org.json.JSONObject;
+
+import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
@@ -57,7 +60,6 @@ public class LoginActivity extends Activity {
 
     private void setListener() {
         btnLogin.setOnClickListener(v -> {
-            String url = MoonkerApplication.URL+MoonkerApplication.USER_PREFIX+"/login";
 
             String username = etUsername.getText().toString();
             String password = etPassword.getText().toString();
@@ -69,39 +71,101 @@ public class LoginActivity extends Activity {
                 return;
             }
 
-            User user = new User(username,password);
-            JSONObject jsonObject = JsonTools.toJsonObject(user);
-
-            JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                    (Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
-                        @Override
-                        public void onResponse(JSONObject response) {
-                            Log.i(TAG, "onResponse: "+response.toString());
-                            CommonResult<User> userCommonResult = JsonTools.toCommonResult(response, User.class);
-                            //登录成功验证 使用commonResult的code做判断
-                            if(userCommonResult.getCode().equals(RetCode.OK)){
-                                Log.i(TAG, "onResponse: "+userCommonResult.getData());
-                                //将用户全局保存
-                                ((MoonkerApplication)getApplication()).setUser(userCommonResult.getData());
-                                Log.i(TAG, "onResponse: login:"+MoonkerApplication.getUser());
-                                Intent intent = new Intent(context, MainActivity.class);
-                                startActivity(intent);
-                            }else{
-                                Toast.makeText(context, userCommonResult.getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-
-                        }
-                    }, new Response.ErrorListener() {
-                        @Override
-                        public void onErrorResponse(VolleyError error) {
-                            Toast.makeText(context,"请求失败"+url, Toast.LENGTH_SHORT).show();
-                        }
-                    });
-            requestQueue.add(jsonObjectRequest);
+            userLoginRequest(username,password);
         });
         btnJumpRegister.setOnClickListener(v -> {
             Intent intent = new Intent(context, RegisterActivity.class);
             startActivity(intent);
         });
     }
+
+    public void userLoginRequest(String username, String password){
+        String url = MoonkerApplication.URL+MoonkerApplication.USER_PREFIX+"/login";
+        User user = new User(username,password);
+        JSONObject jsonObject = JsonTools.toJsonObject(user);
+
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG, "onResponse: "+response.toString());
+                        CommonResult<User> userCommonResult = JsonTools.toCommonResult(response, User.class);
+                        //登录成功验证 使用commonResult的code做判断
+                        if(userCommonResult.getCode().equals(RetCode.OK)){
+                            Log.i(TAG, "onResponse: "+userCommonResult.getData());
+                            //将用户全局保存
+                            ((MoonkerApplication)getApplication()).setUser(userCommonResult.getData());
+                            Log.i(TAG, "onResponse: login:"+MoonkerApplication.getUser());
+                            initUserInformation();
+                            Intent intent = new Intent(context, MainActivity.class);
+                            startActivity(intent);
+                        }else{
+                            Toast.makeText(context, userCommonResult.getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context,"请求失败"+url, Toast.LENGTH_SHORT).show();
+                    }
+                });
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private void initUserInformation() {
+        initUserLikeList();
+        initUserMarkList();
+        initUserDetail();
+    }
+
+    private void initUserLikeList() {
+        String url = MoonkerApplication.UAR_PATH+"/like/"+MoonkerApplication.getUser().getUserID();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        CommonResult<List<Long>> listCommonResult = JsonTools.toLongListCommonResult(response);
+                        Log.d(TAG, "onResponse: "+response);
+                        if(listCommonResult.getCode().equals(RetCode.OK)){
+                            MoonkerApplication.likeArticles.addAll(listCommonResult.getData());
+                        }else{
+                            initUserLikeList();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context,"请求失败"+url, Toast.LENGTH_SHORT).show();
+                    }
+                });
+        requestQueue.add(jsonObjectRequest);
+    }
+
+    private void initUserMarkList() {
+        String url = MoonkerApplication.UAR_PATH+"/mark/"+MoonkerApplication.getUser().getUserID();
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        CommonResult<List<Long>> listCommonResult = JsonTools.toLongListCommonResult(response);
+                        Log.d(TAG, "onResponse: "+response);
+                        if(listCommonResult.getCode().equals(RetCode.OK)){
+                            MoonkerApplication.markArticles.addAll(listCommonResult.getData());
+                        }else{
+                            initUserMarkList();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context,"请求失败"+url, Toast.LENGTH_SHORT).show();
+                    }
+                });
+        requestQueue.add(jsonObjectRequest);
+    }
+    private void initUserDetail() {
+
+    }
+
 }
