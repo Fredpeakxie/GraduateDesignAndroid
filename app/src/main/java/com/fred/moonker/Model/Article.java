@@ -16,8 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 public class Article {
 
-    private Long articleID;
-    private Long userID;
+    private Long articleId;
+    private Long authorId;
     private Long type;
     private String title;//50
     private Long readNum;

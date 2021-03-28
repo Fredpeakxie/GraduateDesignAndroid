@@ -150,7 +150,7 @@ public class RichTextEditActivity extends Activity implements View.OnClickListen
             long userId = ((MoonkerApplication) getApplication()).getUser().getUserID();
             //此处发布文章
             Article article = new Article();
-            article.setUserID(userId);
+            article.setAuthorId(userId);
             article.setTitle(title);
             article.setArticleContent(html);
             article.setPics(PicTools.convertUriListToStringList(uriList,context));
