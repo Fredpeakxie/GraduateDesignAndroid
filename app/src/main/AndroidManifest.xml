@@ -19,7 +19,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.Moonker">
-        <activity android:name=".Activity.ArticleDetailActivity"></activity>
+        <activity android:name=".Activity.MyArticleActivity"></activity>
+        <activity android:name=".Activity.ArticleDetailActivity" />
         <activity android:name=".MainActivity" />
         <activity android:name=".Activity.RegisterActivity" />
         <activity android:name=".Activity.LoginActivity">

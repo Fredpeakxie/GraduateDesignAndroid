@@ -164,6 +164,7 @@ public class LoginActivity extends Activity {
                 });
         requestQueue.add(jsonObjectRequest);
     }
+
     private void initUserDetail() {
 
     }

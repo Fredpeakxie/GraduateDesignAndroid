@@ -67,8 +67,15 @@
                     android:id="@+id/activity_ad_webView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
-                <ListView
+                <TextView
+                    android:id="@+id/block"
+                    android:text="@string/commentArea"
+                    android:textSize="32sp"
                     android:layout_below="@id/activity_ad_webView"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"/>
+                <ListView
+                    android:layout_below="@id/block"
                     android:id="@+id/list_comment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

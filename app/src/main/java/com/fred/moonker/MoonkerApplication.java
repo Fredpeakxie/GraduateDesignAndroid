@@ -15,10 +15,12 @@ public class MoonkerApplication extends Application {
     public static User me;
     public static boolean isLogin;
 
-    public static final String URL = "http://192.168.0.107";
+    public static final String URL = "http://121.40.48.185";
+//    public static final String URL = "http://192.168.0.107";
     public static final String USER_PREFIX = ":8001/user";
     public static final String User_Article_Relation_PREFIX = ":8001/uar";
     public static final String ARTICLE_PREFIX = ":9001/article";
+    public static final String COMMENT_PREFIX = ":10001/comment";
 
     public static final String PROJECT_URI = "moonker";
     public static final String HTML_URI = "/article/";

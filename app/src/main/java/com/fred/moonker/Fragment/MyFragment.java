@@ -27,6 +27,7 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.bumptech.glide.Glide;
 import com.fred.moonker.Activity.LoginActivity;
+import com.fred.moonker.Activity.MyArticleActivity;
 import com.fred.moonker.Model.CommonResult;
 import com.fred.moonker.Model.RetCode;
 import com.fred.moonker.Model.User;
@@ -114,9 +115,9 @@ public class MyFragment extends Fragment {
 
         btnMyArticle = view.findViewById(R.id.set_f_btn_my_article);
         btnMyArticle.setOnClickListener(v->{
-            //TODO view MyArticle and edit it
-//            Intent it = new Intent(getActivity(), MyArticleActivity.class);
-//            startActivity(it);
+//            TODO view MyArticle and edit it
+            Intent it = new Intent(getActivity(), MyArticleActivity.class);
+            startActivity(it);
         });
     }
 

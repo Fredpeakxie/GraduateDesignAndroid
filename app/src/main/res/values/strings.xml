@@ -20,4 +20,6 @@
     <string name="comment">发布</string>
     <string name="myArticle">我的文章</string>
     <string name="queryHint">输入文章标题,作者</string>
+    <string name="commentArea">评论区</string>
+    <string name="anonymousUser">Anonymous users</string>
 </resources>

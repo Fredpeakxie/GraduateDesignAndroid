@@ -13,6 +13,7 @@ import android.webkit.WebViewClient;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,15 +23,19 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
+import com.fred.moonker.Model.Comment;
 import com.fred.moonker.Model.CommonResult;
 import com.fred.moonker.Model.RetCode;
 import com.fred.moonker.MoonkerApplication;
 import com.fred.moonker.R;
+import com.fred.moonker.adapter.Adapters;
+import com.fred.moonker.adapter.CommentAdapter;
 import com.fred.moonker.tools.JsonTools;
 import com.fred.moonker.tools.NetTools;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -49,6 +54,10 @@ public class ArticleDetailActivity extends Activity {
     private final MoonkerApplication application = (MoonkerApplication) getApplication();
     private RequestQueue requestQueue;
 
+    private ListView commentListView ;
+    private List<Comment> commentList = new ArrayList<>();
+    private CommentAdapter commentAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,6 +70,7 @@ public class ArticleDetailActivity extends Activity {
         setListener();
 
         getArticle();
+        getComments();
 
     }
 
@@ -107,6 +117,13 @@ public class ArticleDetailActivity extends Activity {
         tvMarkNum = findViewById(R.id.activity_ad_markNum);
         tvMarkNum.setText(String.format("%d",markNum));
 
+        btnComment = findViewById(R.id.article_detail_a_btn_comment);
+        etComment = findViewById(R.id.article_detail_a_et_comment);
+        commentListView = findViewById(R.id.list_comment);
+        commentAdapter = new CommentAdapter(this,R.layout.item_comment,commentList);
+        commentListView.setAdapter(commentAdapter);
+
+
         btnLike = findViewById(R.id.article_detail_a_btn_like);
         btnMark = findViewById(R.id.article_detail_a_btn_mark);
         liked = application.likeArticles.contains(articleId);
@@ -122,6 +139,7 @@ public class ArticleDetailActivity extends Activity {
         WebSettings webSettings = wvArticleDetail.getSettings();
         webSettings.setJavaScriptEnabled(true);
         wvArticleDetail.setWebViewClient(new ArticleWebViewClient());
+
     }
 
     private void setListener() {
@@ -161,6 +179,41 @@ public class ArticleDetailActivity extends Activity {
             tvMarkNum.setText(Long.toString(markNum));
             ada.marked = !marked;
         });
+
+        btnComment.setOnClickListener(v -> {
+            String comment = etComment.getText().toString();
+            if(comment!=null && !comment.equals(""))
+            publishCommentReq(comment);
+        });
+    }
+
+    private void publishCommentReq(String commentContent) {
+        Long userID = MoonkerApplication.getUser().getUserID();
+        String url = MoonkerApplication.URL+MoonkerApplication.COMMENT_PREFIX;
+        Comment comment = new Comment(userID, articleId, commentContent,MoonkerApplication.getUser().getNickname());
+        JSONObject jsonObject = JsonTools.toJsonObject(comment);
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.POST, url, jsonObject, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.d(TAG, "onResponse: "+response.toString());
+                        CommonResult<String> strCommonResult = JsonTools.toCommonResult(response, String.class);
+                        if(strCommonResult.getCode().equals(RetCode.OK)){
+                            Toast.makeText(context,"发表评论成功",Toast.LENGTH_SHORT).show();
+                            etComment.setText("");
+                            commentList.add(comment);
+                            commentAdapter.notifyDataSetChanged();
+                        }else {
+                            Toast.makeText(context,strCommonResult.getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context,"请求失败"+url, Toast.LENGTH_SHORT).show();
+                    }
+                });
+        requestQueue.add(jsonObjectRequest);
     }
 
     public void getArticle(){
@@ -180,6 +233,31 @@ public class ArticleDetailActivity extends Activity {
             }
         });
         requestQueue.add(stringRequest);
+    }
+
+    private void getComments() {
+        String url = MoonkerApplication.URL+MoonkerApplication.COMMENT_PREFIX+"/"+articleId;
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.i(TAG, "onResponse: " + response.toString());
+                        CommonResult<List<Comment>> listCommonResult = JsonTools.toCommentListCommonResult(response);
+                        if(listCommonResult.getCode().equals(RetCode.OK)){
+                            commentList.addAll(listCommonResult.getData());
+                            commentAdapter.notifyDataSetChanged();
+                            Adapters.setListViewHeightBasedOnChildren(commentListView);
+                        }else {
+                            Toast.makeText(context,listCommonResult.getMessage(),Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Toast.makeText(context,"请求失败"+url, Toast.LENGTH_SHORT).show();
+                    }
+                });
+        requestQueue.add(jsonObjectRequest);
     }
 
     private class ArticleWebViewClient extends WebViewClient {

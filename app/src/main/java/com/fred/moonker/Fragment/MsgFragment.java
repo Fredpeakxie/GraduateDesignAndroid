@@ -64,22 +64,38 @@ public class MsgFragment extends Fragment {
         return view;
     }
 
+
+    private void clearData() {
+        index = 0L;
+        articleDetailList.clear();
+    }
+
+    private View initView(@NonNull LayoutInflater inflater){
+        View view = inflater.inflate(R.layout.fragment_msg,null);
+        listView = view.findViewById(R.id.list_msg);
+        requestQueue = NetTools.getInstance(this.getActivity().getApplicationContext()).getRequestQueue();
+        searchView = view.findViewById(R.id.msg_f_searchView);
+        searchView.setSubmitButtonEnabled(true);
+        //TODO footer
+        return view;
+    }
+
     private void setListener() {
         searchView.setOnQueryTextListener(
-            new SearchView.OnQueryTextListener() {
-                @Override
-                public boolean onQueryTextSubmit(String query) {
-                    clearData();
-                    sendSearchReq(query);
-                    return false;
-                }
+                new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        clearData();
+                        sendSearchReq(query);
+                        return false;
+                    }
 
-                @Override
-                public boolean onQueryTextChange(String newText) {
-//                    newText
-                    return false;
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+//                        sendSuggestReq(newText);
+                        return false;
+                    }
                 }
-            }
         );
 
         searchView.setOnCloseListener(
@@ -94,19 +110,38 @@ public class MsgFragment extends Fragment {
         );
 
         searchView.setOnSuggestionListener(
-            new SearchView.OnSuggestionListener() {
-                @Override
-                public boolean onSuggestionSelect(int position) {
-                    return false;
-                }
+                new SearchView.OnSuggestionListener() {
+                    @Override
+                    public boolean onSuggestionSelect(int position) {
+                        return false;
+                    }
 
-                @Override
-                public boolean onSuggestionClick(int position) {
-                    return false;
+                    @Override
+                    public boolean onSuggestionClick(int position) {
+                        return false;
+                    }
                 }
-            }
         );
     }
+
+//    private void sendSuggestReq(String newText) {
+//        String url = MoonkerApplication.URL+ MoonkerApplication.ARTICLE_PREFIX +"/suggest/"+newText;
+//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+//                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
+//                    @Override
+//                    public void onResponse(JSONObject response) {
+//                        Log.i(TAG, "onResponse: " + response.toString());
+//                        CommonResult<List<String>> commonResult = JsonTools.toStringListCommonResult(response);
+//
+//                    }
+//                }, new Response.ErrorListener() {
+//                    @Override
+//                    public void onErrorResponse(VolleyError error) {
+//                        Toast.makeText(getActivity(),"请求失败"+url, Toast.LENGTH_SHORT).show();
+//                    }
+//                });
+//        requestQueue.add(jsonObjectRequest);
+//    }
 
     private void sendSearchReq(String queryText) {
         String url = MoonkerApplication.URL+ MoonkerApplication.ARTICLE_PREFIX +"/search/"+index+"/"+NUM+"/"+queryText;
@@ -132,20 +167,6 @@ public class MsgFragment extends Fragment {
                     }
                 });
         requestQueue.add(jsonObjectRequest);
-    }
-
-    private void clearData() {
-        index = 0L;
-        articleDetailList.clear();
-    }
-
-    private View initView(@NonNull LayoutInflater inflater){
-        View view = inflater.inflate(R.layout.fragment_msg,null);
-        listView = view.findViewById(R.id.list_msg);
-        requestQueue = NetTools.getInstance(this.getActivity().getApplicationContext()).getRequestQueue();
-        searchView = view.findViewById(R.id.msg_f_searchView);
-        //TODO footer
-        return view;
     }
 
     private void initData(){

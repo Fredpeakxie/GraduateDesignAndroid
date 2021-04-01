@@ -1,17 +1,16 @@
-package com.fred.moonker.Fragment;
+package com.fred.moonker.Activity;
 
+import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.fragment.app.Fragment;
 
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
@@ -35,7 +34,8 @@ import java.util.List;
 
 import static android.content.ContentValues.TAG;
 
-public class MarkFragment extends Fragment {
+public class MyArticleActivity extends Activity {
+    private Context context = this;
     private ListView listView;
     private List<ArticleDetail> articleDetailList = new ArrayList<>();
     private ArticleDetailAdapter articleDetailAdapter;
@@ -44,39 +44,36 @@ public class MarkFragment extends Fragment {
     private Long index = 0L;
     private static final Long NUM = 20L;
 
-
-    @Nullable
     @Override
-    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = initView(inflater);
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_my_article);
+        initView();
         initData();
         initViewAfterInitData();
-        return view;
     }
 
-    private View initView(@NonNull LayoutInflater inflater){
-        View view = inflater.inflate(R.layout.fragment_mark,null);
-        listView = view.findViewById(R.id.list_mark);
-        requestQueue = NetTools.getInstance(this.getActivity().getApplicationContext()).getRequestQueue();
-        return view;
+    private void initView(){
+        listView = findViewById(R.id.list_my_article);
+        requestQueue = NetTools.getInstance(getApplicationContext()).getRequestQueue();
     }
 
     private void initData() {
-        Long userId = ((MoonkerApplication) getActivity().getApplication()).getUser().getUserID();
-        addMarkedArticleDetailList(index,NUM,userId);
+        Long userId = ((MoonkerApplication)getApplication()).getUser().getUserID();
+        addMyArticleDetailList(index,NUM,userId);
     }
 
     private void initViewAfterInitData(){
-        articleDetailAdapter = new ArticleDetailAdapter(getActivity(),R.layout.item_article_detail,articleDetailList);
+        articleDetailAdapter = new ArticleDetailAdapter(context,R.layout.item_article_detail,articleDetailList);
         listView.setAdapter(articleDetailAdapter);
-        listView.setOnItemClickListener(new ArticleClick(listView,getContext()));
+        listView.setOnItemClickListener(new ArticleClick(listView,context));
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
                 if (scrollState == AbsListView.OnScrollListener.SCROLL_STATE_IDLE){
                     if(view.getLastVisiblePosition() == view.getCount()-1){
-                        Long userId = ((MoonkerApplication) getActivity().getApplication()).getUser().getUserID();
-                        addMarkedArticleDetailList(index,NUM,userId);
+                        Long userId = ((MoonkerApplication)getApplication()).getUser().getUserID();
+                        addMyArticleDetailList(index,NUM,userId);
                     }
                 }
             }
@@ -89,8 +86,8 @@ public class MarkFragment extends Fragment {
     }
 
     //触发加载文章详情
-    private void addMarkedArticleDetailList(Long start,Long num,Long userId){
-        String url = MoonkerApplication.URL+MoonkerApplication.ARTICLE_PREFIX+"/ArticleDetail/mark/"+start+"/"+num+"/"+userId;
+    private void addMyArticleDetailList(Long start,Long num,Long userId){
+        String url = MoonkerApplication.URL+MoonkerApplication.ARTICLE_PREFIX+"/ArticleDetail/my/"+start+"/"+num+"/"+userId;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
                 (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
                     @Override
@@ -109,7 +106,7 @@ public class MarkFragment extends Fragment {
                 }, new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        Toast.makeText(getActivity(),"请求失败"+url, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(context,"请求失败"+url, Toast.LENGTH_SHORT).show();
                     }
                 });
         requestQueue.add(jsonObjectRequest);
