@@ -49,9 +49,14 @@ public class MarkFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = initView(inflater);
+        return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         initData();
         initViewAfterInitData();
-        return view;
     }
 
     private View initView(@NonNull LayoutInflater inflater){
