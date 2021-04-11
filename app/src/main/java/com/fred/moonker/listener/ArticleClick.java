@@ -32,7 +32,7 @@ public class ArticleClick implements AdapterView.OnItemClickListener {
         intent.putExtra("likeNum",articleDetail.getLikeNum());
         intent.putExtra("markNum",articleDetail.getMarkNum());
         intent.putExtra("authorID",articleDetail.getAuthorId());
-        intent.putExtra("nickname",articleDetail.getNickname());
+        intent.putExtra("authorName",articleDetail.getNickname());
         context.startActivity(intent);
     }
 }

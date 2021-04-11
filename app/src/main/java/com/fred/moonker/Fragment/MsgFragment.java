@@ -124,25 +124,6 @@ public class MsgFragment extends Fragment {
         );
     }
 
-//    private void sendSuggestReq(String newText) {
-//        String url = MoonkerApplication.URL+ MoonkerApplication.ARTICLE_PREFIX +"/suggest/"+newText;
-//        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-//                (Request.Method.GET, url, null, new Response.Listener<JSONObject>() {
-//                    @Override
-//                    public void onResponse(JSONObject response) {
-//                        Log.i(TAG, "onResponse: " + response.toString());
-//                        CommonResult<List<String>> commonResult = JsonTools.toStringListCommonResult(response);
-//
-//                    }
-//                }, new Response.ErrorListener() {
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                        Toast.makeText(getActivity(),"请求失败"+url, Toast.LENGTH_SHORT).show();
-//                    }
-//                });
-//        requestQueue.add(jsonObjectRequest);
-//    }
-
     private void sendSearchReq(String queryText) {
         String url = MoonkerApplication.URL+ MoonkerApplication.ARTICLE_PREFIX +"/search/"+index+"/"+NUM+"/"+queryText;
         JsonObjectRequest jsonObjectRequest = new JsonObjectRequest

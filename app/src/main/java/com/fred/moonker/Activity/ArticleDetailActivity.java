@@ -97,7 +97,7 @@ public class ArticleDetailActivity extends Activity {
     public void getDataFromPrevious(){
         Intent intent = getIntent();
         title = intent.getStringExtra("title");
-        userNickname = intent.getStringExtra("userNickname");
+        userNickname = intent.getStringExtra("authorName");
         articleId = intent.getLongExtra("articleId",-1L);
         authorId = intent.getLongExtra("authorID",-1L);
         readNum = intent.getLongExtra("readNum",-1L);
