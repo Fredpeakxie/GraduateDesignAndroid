@@ -37,6 +37,7 @@ import com.fred.moonker.MoonkerApplication;
 import com.fred.moonker.R;
 import com.fred.moonker.richeditor.view.ColorPickerView;
 import com.fred.moonker.richeditor.view.RichEditor;
+import com.fred.moonker.tools.CacheTool;
 import com.fred.moonker.tools.JsonTools;
 import com.fred.moonker.tools.NetTools;
 import com.fred.moonker.tools.PicTools;
@@ -148,6 +149,11 @@ public class RichTextEditActivity extends Activity implements View.OnClickListen
         updateMyArticle();
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
     private void updateMyArticle() {
         isUpdate = false;
         Intent intent = getIntent();
@@ -166,6 +172,7 @@ public class RichTextEditActivity extends Activity implements View.OnClickListen
     }
 
     private void getArticleContent(Long articleId) {
+        CacheTool.clearAllCache(context);
         String articleIdS = String.format("%05d", articleId);
         Log.i(TAG, "getArticle: "+articleIdS);
         String url = MoonkerApplication.HTML_PATH+ "mb" + articleIdS + ".html";
@@ -205,6 +212,7 @@ public class RichTextEditActivity extends Activity implements View.OnClickListen
 
             Document doc = Jsoup.parse(html);
             Elements imgs = doc.getElementsByTag("img");
+            uriList.clear();
             for (int i = 0; i < imgs.size(); i++){
                 String src = imgs.get(i).attributes().get("src");
                 if(isUpdate && src.startsWith("..")){

@@ -22,7 +22,12 @@ public class NetTools {
         imageLoader = new ImageLoader(requestQueue,
                 new ImageLoader.ImageCache() {
                     private final LruCache<String, Bitmap>
-                            cache = new LruCache<String, Bitmap>(20);
+                            cache = new LruCache<String, Bitmap>(8*1024*1024){
+                        @Override
+                        protected int sizeOf(String key, Bitmap value) {
+                            return value.getRowBytes()*value.getHeight();
+                        }
+                    };
 
                     @Override
                     public Bitmap getBitmap(String url) {

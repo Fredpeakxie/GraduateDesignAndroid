@@ -30,6 +30,7 @@ import com.fred.moonker.MoonkerApplication;
 import com.fred.moonker.R;
 import com.fred.moonker.adapter.Adapters;
 import com.fred.moonker.adapter.CommentAdapter;
+import com.fred.moonker.tools.CacheTool;
 import com.fred.moonker.tools.JsonTools;
 import com.fred.moonker.tools.NetTools;
 
@@ -217,6 +218,7 @@ public class ArticleDetailActivity extends Activity {
     }
 
     public void getArticle(){
+        CacheTool.clearAllCache(context);
         String articleIdS = String.format("%05d", articleId);
         Log.i(TAG, "getArticle: "+articleIdS);
         String url = MoonkerApplication.HTML_PATH+ "mb" + articleIdS + ".html";
