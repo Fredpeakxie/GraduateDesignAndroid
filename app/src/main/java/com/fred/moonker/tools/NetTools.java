@@ -43,6 +43,10 @@ public class NetTools {
         return instance;
     }
 
+    public ImageLoader getImageLoad(){
+        return this.imageLoader;
+    }
+
     public RequestQueue getRequestQueue() {
         if (requestQueue == null) {
             // getApplicationContext() is key, it keeps you from leaking the

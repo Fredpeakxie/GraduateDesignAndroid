@@ -27,6 +27,7 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.fred.moonker.MainActivity;
 import com.fred.moonker.Model.Article;
 import com.fred.moonker.Model.CommonResult;
@@ -41,7 +42,11 @@ import com.fred.moonker.tools.NetTools;
 import com.fred.moonker.tools.PicTools;
 
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
 
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +57,8 @@ public class RichTextEditActivity extends Activity implements View.OnClickListen
     private EditText etTitle;
     private List<Uri>  uriList;
     private RequestQueue requestQueue;
+    private Boolean isUpdate;
+    private Long articleId;
 
     private Context context = this;
     /********************View**********************/
@@ -137,6 +144,55 @@ public class RichTextEditActivity extends Activity implements View.OnClickListen
         initView();
         initClickListener();
         setPublish();
+        //在更新情况下调用
+        updateMyArticle();
+    }
+
+    private void updateMyArticle() {
+        isUpdate = false;
+        Intent intent = getIntent();
+        String title = intent.getStringExtra("title");
+        String userNickname = intent.getStringExtra("authorName");
+        articleId = intent.getLongExtra("articleId",-1L);
+        Long authorId = intent.getLongExtra("authorID",-1L);
+        if(articleId != -1L){
+            isUpdate = true;
+            etTitle.setText(title);
+            getArticleContent(articleId);
+            btnPublish.setText("更新");
+        }else {
+            return;
+        }
+    }
+
+    private void getArticleContent(Long articleId) {
+        String articleIdS = String.format("%05d", articleId);
+        Log.i(TAG, "getArticle: "+articleIdS);
+        String url = MoonkerApplication.HTML_PATH+ "mb" + articleIdS + ".html";
+        StringRequest stringRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+//                        wvArticleDetail.loadDataWithBaseURL(url,response,"text/html","UTF-8","");
+                        Document doc = Jsoup.parse(response);
+                        Elements imgs = doc.getElementsByTag("img");
+                        for (int i = 0; i < imgs.size(); i++){
+                            String src = imgs.get(i).attributes().get("src");
+                            if(isUpdate && src.startsWith("..")){
+                                src = MoonkerApplication.ARTICLE_PIC_PATH + src.substring(2);
+                                imgs.get(i).attr("src",src);
+                                Log.i(TAG, "getArticleContent: "+src);
+                            }
+                        }
+                        mEditor.setHtml(doc.toString());
+                    }
+                }, new Response.ErrorListener() {
+            @Override
+            public void onErrorResponse(VolleyError error) {
+                Toast.makeText(context,"请求失败"+url, Toast.LENGTH_SHORT).show();
+            }
+        });
+        requestQueue.add(stringRequest);
     }
 
     private void setPublish(){
@@ -146,10 +202,24 @@ public class RichTextEditActivity extends Activity implements View.OnClickListen
         btnPublish = findViewById(R.id.tool_bar_publish);
         btnPublish.setOnClickListener(view ->{
             String html = mEditor.getHtml();
+
+            Document doc = Jsoup.parse(html);
+            Elements imgs = doc.getElementsByTag("img");
+            for (int i = 0; i < imgs.size(); i++){
+                String src = imgs.get(i).attributes().get("src");
+                if(isUpdate && src.startsWith("..")){
+                    src = MoonkerApplication.ARTICLE_PIC_PATH + src.substring(2);
+                    Log.i(TAG, "setPublish: "+src);
+                }
+                Uri uri = Uri.parse(src);
+                uriList.add(uri);
+            }
             String title = etTitle.getText().toString();
             long userId = ((MoonkerApplication) getApplication()).getUser().getUserID();
             //此处发布文章
             Article article = new Article();
+            if(isUpdate)
+                article.setArticleId(articleId);
             article.setAuthorId(userId);
             article.setTitle(title);
             article.setArticleContent(html);
@@ -178,8 +248,6 @@ public class RichTextEditActivity extends Activity implements View.OnClickListen
                         }
                     });
             requestQueue.add(jsonObjectRequest);
-
-//            NetThread.PublishArticle(userId,title,html,uriList,this,handler);
 
         });
     }
@@ -545,10 +613,6 @@ public class RichTextEditActivity extends Activity implements View.OnClickListen
             if(data != null){
                 Uri picUri = data.getData();
                 mEditor.insertImage(picUri.toString(),"dachshund");
-                uriList.add(picUri);//一个问题用户如何删除图片？
-
-                //可以开启新线程将图片传过去先 但是如果用户不想使用这张图片 就得消去 得做触发事件
-                //比较麻烦 可以先存储
             }
         }
     }

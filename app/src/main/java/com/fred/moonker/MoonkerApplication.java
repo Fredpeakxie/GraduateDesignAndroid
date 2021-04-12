@@ -1,6 +1,7 @@
 package com.fred.moonker;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.fred.moonker.Model.User;
 
@@ -15,8 +16,10 @@ public class MoonkerApplication extends Application {
     public static User me;
     public static boolean isLogin;
 
-    public static final String URL = "http://121.40.48.185";
+//    public static final String URL = "http://121.40.48.185";
 //    public static final String URL = "http://192.168.0.107";
+    public static final String URL = "http://192.168.3.199";
+
     public static final String USER_PREFIX = ":8001/user";
     public static final String User_Article_Relation_PREFIX = ":8001/uar";
     public static final String ARTICLE_PREFIX = ":9001/article";
@@ -30,6 +33,7 @@ public class MoonkerApplication extends Application {
     public static final String HTML_PATH = URL+":9001/"+PROJECT_URI+HTML_URI;
     public static final String UAR_PATH = URL+User_Article_Relation_PREFIX;
     public static final String PORTRAIT_PATH = URL+":8001/"+PROJECT_URI+PORTRAIT_URI;
+    public static final String ARTICLE_PIC_PATH = URL+":9001/"+PROJECT_URI;
 
     /**
      * 退出登录时调用

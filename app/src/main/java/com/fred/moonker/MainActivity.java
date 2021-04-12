@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,7 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private MarkFragment markFragment;
     private MyFragment myFragment;
     private Fragment[] fragments;
-    private int lastfragment;//用于记录上个选择的Fragment
+    private int lastFragment;//用于记录上个选择的Fragment
     private Button btnAdd;
 
     @Override
@@ -84,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
         markFragment = new MarkFragment();
         myFragment = new MyFragment();
         fragments = new Fragment[]{msgFragment, markFragment, myFragment};
-        lastfragment = 0;
+        lastFragment = 0;
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment, msgFragment).show(msgFragment).commit();
         bottomNavigationView = findViewById(R.id.bv_bottomNavigation);
         bottomNavigationView.setOnNavigationItemSelectedListener(changeFragment);
@@ -98,23 +97,23 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.msg: {
                     //这部分的if else 并没有看懂什么原因
                     //防止重复切换造成的视觉混乱
-                    if (lastfragment != 0) {
-                        switchFragment(lastfragment, 0);
-                        lastfragment = 0;
+                    if (lastFragment != 0) {
+                        switchFragment(lastFragment, 0);
+                        lastFragment = 0;
                     }
                     return true;
                 }
                 case R.id.mark: {
-                    if (lastfragment != 1) {
-                        switchFragment(lastfragment, 1);
-                        lastfragment = 1;
+                    if (lastFragment != 1) {
+                        switchFragment(lastFragment, 1);
+                        lastFragment = 1;
                     }
                     return true;
                 }
                 case R.id.set: {
-                    if (lastfragment != 2) {
-                        switchFragment(lastfragment, 2);
-                        lastfragment = 2;
+                    if (lastFragment != 2) {
+                        switchFragment(lastFragment, 2);
+                        lastFragment = 2;
                     }
                     return true;
                 }

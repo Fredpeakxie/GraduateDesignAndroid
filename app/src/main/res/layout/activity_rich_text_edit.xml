@@ -17,7 +17,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
-                android:text="@string/publish_article"
+                android:text="@string/edit_article"
                 android:textSize="35dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
@@ -32,9 +32,9 @@
                 android:layout_height="match_parent"/>
         </RelativeLayout>
     </Toolbar>
+    <!--        android:text="@string/enter_title"-->
     <EditText
         android:id="@+id/rte_et_title"
-        android:text="@string/enter_title"
         android:textSize="25dp"
         android:layout_width="match_parent"
         android:layout_height="50dp"/>

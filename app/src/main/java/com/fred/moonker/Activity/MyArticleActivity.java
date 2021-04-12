@@ -23,7 +23,7 @@ import com.fred.moonker.Model.RetCode;
 import com.fred.moonker.MoonkerApplication;
 import com.fred.moonker.R;
 import com.fred.moonker.adapter.ArticleDetailAdapter;
-import com.fred.moonker.listener.ArticleClick;
+import com.fred.moonker.listener.MyArticleClick;
 import com.fred.moonker.tools.JsonTools;
 import com.fred.moonker.tools.NetTools;
 
@@ -66,7 +66,7 @@ public class MyArticleActivity extends Activity {
     private void initViewAfterInitData(){
         articleDetailAdapter = new ArticleDetailAdapter(context,R.layout.item_article_detail,articleDetailList);
         listView.setAdapter(articleDetailAdapter);
-        listView.setOnItemClickListener(new ArticleClick(listView,context));
+        listView.setOnItemClickListener(new MyArticleClick(listView,context));
         listView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {

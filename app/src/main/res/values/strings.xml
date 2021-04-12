@@ -13,7 +13,7 @@
     <string name="edit">编辑</string>
     <string name="save">保存</string>
     <string name="finish">完成</string>
-    <string name="publish_article">发布文章</string>
+    <string name="edit_article">编辑文章</string>
     <string name="publish">发布</string>
     <string name="enter_title">请输入文章标题</string>
     <string name="exit">退出</string>
