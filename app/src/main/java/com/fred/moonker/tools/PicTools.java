@@ -57,44 +57,11 @@ public class PicTools {
         String imgToBase64 = "";
         InputStream inputStream = null;
         try {
-            final Bitmap[] bitmap = new Bitmap[1];
+            Bitmap bitmap;
             //网络图片 存在在原服务器中的图片
             if (uri.getPath().startsWith("/moonker")) {
                 System.out.println("a" + uri.getSchemeSpecificPart());
                 String urlString  = "http:" + uri.getSchemeSpecificPart();
-
-//                imageLoader.get("http:" + uri.getSchemeSpecificPart(), new ImageLoader.ImageListener() {
-//                    @Override
-//                    public void onResponse(ImageLoader.ImageContainer response, boolean isImmediate) {
-//                        bitmap[0] = response.getBitmap();
-//                    }
-//                    @Override
-//                    public void onErrorResponse(VolleyError error) {
-//                    }
-//                });
-
-//                com.nostra13.universalimageloader.core.ImageLoader.getInstance().loadImage("http:" + uri.getSchemeSpecificPart(), new ImageLoadingListener() {
-//                    @Override
-//                    public void onLoadingStarted(String imageUri, View view) {
-//                        Log.d(TAG, "onLoadingStarted: " );
-//                    }
-//
-//                    @Override
-//                    public void onLoadingFailed(String imageUri, View view, FailReason failReason) {
-//                        Log.d(TAG, "onLoadingStarted: " );
-//                    }
-//
-//                    @Override
-//                    public void onLoadingComplete(String imageUri, View view, Bitmap loadedImage) {
-//                        Log.d(TAG, "onLoadingStarted: " );
-//                        bitmap[0] = loadedImage;
-//                    }
-//
-//                    @Override
-//                    public void onLoadingCancelled(String imageUri, View view) {
-//                        Log.d(TAG, "onLoadingStarted: " );
-//                    }
-//                });
 
                 FutureTask<Bitmap> futureTask = new FutureTask<Bitmap>(() ->{
                     URL url = new URL(urlString);
@@ -107,12 +74,12 @@ public class PicTools {
                     return BitmapFactory.decodeStream(is);
                 });
                 futureTask.run();
-                bitmap[0] = futureTask.get();
+                bitmap = futureTask.get();
             } else {
                 //本地图片
                 inputStream = context.getContentResolver().openInputStream(uri);
-                bitmap[0] = BitmapFactory.decodeStream(inputStream);
-                imgToBase64 = imgToBase64(bitmap[0]);
+                bitmap = BitmapFactory.decodeStream(inputStream);
+                imgToBase64 = imgToBase64(bitmap);
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -15,15 +15,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
             <TextView
-                android:text="BLOG"
+                android:text="Moonker"
                 android:textSize="35dp"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"/>
-            <Button
+            <ImageButton
                 android:id="@+id/tool_bar_add"
                 android:layout_alignParentRight="true"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
+                style="@style/btn"
                 android:background="@mipmap/add"/>
         </RelativeLayout>
     </Toolbar>

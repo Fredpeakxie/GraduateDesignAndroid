@@ -5,12 +5,15 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
+import android.widget.ImageButton;
 
+import com.fred.moonker.Activity.LoginActivity;
 import com.fred.moonker.Fragment.MarkFragment;
 import com.fred.moonker.Fragment.MsgFragment;
 import com.fred.moonker.Fragment.MyFragment;
@@ -27,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private MyFragment myFragment;
     private Fragment[] fragments;
     private int lastFragment;//用于记录上个选择的Fragment
-    private Button btnAdd;
+    private ImageButton btnAdd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,9 +72,9 @@ public class MainActivity extends AppCompatActivity {
      * 用户登录状态检测
      */
 //    private void loginStateCheck(){
-//        MyApplication application = (MyApplication) this.getApplication();
+//        MoonkerApplication application = (MoonkerApplication) this.getApplication();
 //        if(application.isLogin() == false){
-//            Intent it = new Intent(this,LoginActivity.class);
+//            Intent it = new Intent(this, LoginActivity.class);
 //            startActivity(it);
 //        }
 //    }
@@ -123,9 +126,9 @@ public class MainActivity extends AppCompatActivity {
     };
 
     //切换Fragment
-    private void switchFragment(int lastfragment, int index) {
+    private void switchFragment(int lastFragment, int index) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.hide(fragments[lastfragment]);
+        transaction.hide(fragments[lastFragment]);
         //隐藏上个Fragment 如果添加过了
         if(fragments[index].isAdded()==false){
             transaction.add(R.id.fragment,fragments[index]);
