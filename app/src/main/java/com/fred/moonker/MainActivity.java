@@ -71,13 +71,13 @@ public class MainActivity extends AppCompatActivity {
     /**
      * 用户登录状态检测
      */
-//    private void loginStateCheck(){
-//        MoonkerApplication application = (MoonkerApplication) this.getApplication();
-//        if(application.isLogin() == false){
-//            Intent it = new Intent(this, LoginActivity.class);
-//            startActivity(it);
-//        }
-//    }
+    private void loginStateCheck(){
+        MoonkerApplication application = (MoonkerApplication) this.getApplication();
+        if(application.isLogin == false){
+            Intent it = new Intent(this, LoginActivity.class);
+            startActivity(it);
+        }
+    }
 
 
     //初始化fragment和fragment数组

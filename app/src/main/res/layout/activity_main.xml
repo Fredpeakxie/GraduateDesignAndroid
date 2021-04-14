@@ -24,7 +24,6 @@
                 android:layout_alignParentRight="true"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
-                style="@style/btn"
                 android:background="@mipmap/add"/>
         </RelativeLayout>
     </Toolbar>

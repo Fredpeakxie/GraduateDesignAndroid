@@ -35,7 +35,7 @@ dependencies {
     implementation 'com.alibaba:fastjson:1.2.72'
     implementation 'org.projectlombok:lombok:1.18.10'
     annotationProcessor 'org.projectlombok:lombok:1.18.10'
-    compile 'com.github.bumptech.glide:glide:4.0.0'
+    implementation 'com.github.bumptech.glide:glide:4.0.0'
     implementation 'com.nostra13.universalimageloader:universal-image-loader:1.9.5'
 
     //创建自带

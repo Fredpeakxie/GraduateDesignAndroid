@@ -14,11 +14,11 @@ public class MoonkerApplication extends Application {
     public static List<Long> markArticles = new ArrayList<>();
 
     public static User me;
-    public static boolean isLogin;
+    public static boolean isLogin = false;
 
-    public static final String URL = "http://121.40.48.185";
+//    public static final String URL = "http://121.40.48.185";
 //    public static final String URL = "http://192.168.0.107";
-//    public static final String URL = "http://192.168.3.199";
+    public static final String URL = "http://192.168.3.199";
 
     public static final String USER_PREFIX = ":8001/user";
     public static final String User_Article_Relation_PREFIX = ":8001/uar";

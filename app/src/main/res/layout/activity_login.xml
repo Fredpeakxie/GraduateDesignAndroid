@@ -23,6 +23,8 @@
 
         <EditText
             android:id="@+id/login_act_edit_username"
+            android:inputType="text"
+            android:lines="1"
             android:hint="username"
             android:textColorHint="#778899"
             android:layout_width="match_parent"
@@ -33,6 +35,7 @@
             android:hint="password"
             android:textColorHint="#778899"
             android:inputType="textPassword"
+            android:lines="1"
             android:layout_alignParentBottom="true"
             android:layout_width="match_parent"
             android:layout_height="50dp" />

@@ -208,6 +208,13 @@ public class RichTextEditActivity extends Activity implements View.OnClickListen
         etTitle = findViewById(R.id.rte_et_title);
         btnPublish = findViewById(R.id.tool_bar_publish);
         btnPublish.setOnClickListener(view ->{
+            btnPublish.setEnabled(false);
+            Toast.makeText(context,"文章正在上传,请稍等",Toast.LENGTH_LONG);
+//            try {
+//                Thread.sleep(5000);
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
             String html = mEditor.getHtml();
 
             Document doc = Jsoup.parse(html);
@@ -248,11 +255,13 @@ public class RichTextEditActivity extends Activity implements View.OnClickListen
                             }else {
                                 Toast.makeText(context,longCommonResult.getMessage(),Toast.LENGTH_SHORT).show();
                             }
+                            btnPublish.setEnabled(true);
                         }
                     }, new Response.ErrorListener() {
                         @Override
                         public void onErrorResponse(VolleyError error) {
                             Toast.makeText(context,"请求失败"+url, Toast.LENGTH_SHORT).show();
+                            btnPublish.setEnabled(true);
                         }
                     });
             requestQueue.add(jsonObjectRequest);
